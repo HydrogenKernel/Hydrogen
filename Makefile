@@ -380,8 +380,8 @@ LD		= $(CROSS_COMPILE)ld
 CC		= $(CROSS_COMPILE)gcc
 LDGOLD		= $(CROSS_COMPILE)ld.gold
 CPP		= $(CC) -E
-AR             ?= $(CROSS_COMPILE)ar
-NM             ?= $(CROSS_COMPILE)nm
+AR		= $(CROSS_COMPILE)ar
+NM		= $(CROSS_COMPILE)nm
 STRIP		= $(CROSS_COMPILE)strip
 OBJCOPY		= $(CROSS_COMPILE)objcopy
 OBJDUMP		= $(CROSS_COMPILE)objdump
@@ -684,22 +684,6 @@ LLVM_NM		:= llvm-nm
 export LLVM_AR LLVM_NM
 endif
 
-ifdef CONFIG_LTO_GCC
-LTO_CFLAGS	:= -flto -flto=jobserver -fno-fat-lto-objects \
-		   -fuse-linker-plugin -fwhole-program
-KBUILD_CFLAGS	+= $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
-LTO_LDFLAGS	:= $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi \
-		   -Wno-stringop-overflow -flinker-output=nolto-rel
-LDFINAL		:= $(CONFIG_SHELL) $(srctree)/scripts/gcc-ld $(LTO_LDFLAGS)
-AR		:= $(CROSS_COMPILE)gcc-ar
-NM		:= $(CROSS_COMPILE)gcc-nm
-DISABLE_LTO	:= -fno-lto
-export DISABLE_LTO LDFINAL
-else
-LDFINAL		:= $(LD)
-export LDFINAL
-endif
-
 # The arch Makefile can set ARCH_{CPP,A,C}FLAGS to override the default
 # values of the respective KBUILD_* variables
 ARCH_CPPFLAGS :=
@@ -822,6 +806,7 @@ ifdef CONFIG_INIT_STACK_ALL_ZERO
 # Future support for zero initialization is still being debated, see
 # https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
 # renamed or dropped.
+KBUILD_CFLAGS  += -ftrivial-auto-var-init=zero
 KBUILD_CFLAGS  += -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
 endif
 
