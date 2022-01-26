@@ -7,10 +7,19 @@ SECONDS=0 # builtin bash timer
 ZIPNAME="HydrogenKernel-miatoll-$(date '+%Y%m%d-%H%M').zip"
 GCC64_DIR="$HOME/GCC/aarch64-elf"
 GCC32_DIR="$HOME/GCC/arm-eabi"
+WET="transfer"
 DEFCONFIG="cust_defconfig"
 
 export PATH="$GCC64_DIR/bin:$PATH"
 export PATH="$GCC32_DIR/bin/:$PATH"
+
+if ! [ -a "$WET" ]; then
+echo "Setting up wetransfer"
+if ! curl -sL https://git.io/file-transfer | sh; then
+echo "Unable to setup wetransfer ..... aborting"
+exit 1
+fi
+fi
 
 if ! [ -d "$GCC64_DIR" ]; then
 echo "GCC for arm64 not found! Cloning to $GCC64_DIR..."
@@ -30,6 +39,12 @@ fi
 
 if [[ $1 = "-c" || $1 = "--clean" ]]; then
 rm -rf out
+fi
+
+if [[ $1 = "-r" || $1 = "--regen" ]]; then
+make O=out ARCH=arm64 $DEFCONFIG savedefconfig
+cp out/defconfig arch/arm64/configs/$DEFCONFIG
+exit 1;
 fi
 
 mkdir -p out
@@ -54,7 +69,7 @@ cd ..
 rm -rf AnyKernel3
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
-curl --upload-file $ZIPNAME http://transfer.sh/$ZIPNAME; echo
+./transfer wet $ZIPNAME; echo
 else
 echo -e "\nCompilation failed!"
 fi
