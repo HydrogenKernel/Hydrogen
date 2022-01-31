@@ -51,15 +51,15 @@ mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
 
 echo -e "\nStarting compilation...\n"
-make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=$GCC64_DIR/bin/aarch64-none-elf- CROSS_COMPILE_ARM32=$GCC32_DIR/bin/arm-none-eabi- Image.gz dtbo.img
+make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=$GCC64_DIR/bin/aarch64-none-elf- CROSS_COMPILE_ARM32=$GCC32_DIR/bin/arm-none-eabi- Image.gz-dtb dtbo.img
 
-if [ -f "out/arch/arm64/boot/Image.gz" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
+if [ -f "out/arch/arm64/boot/Image.gz-dtb" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
 echo -e "\nKernel compiled succesfully! Zipping up...\n"
 if ! git clone -q https://github.com/Arjun-Ingole/AnyKernel3 -b miatoll; then
 echo -e "\nCloning AnyKernel3 repo failed! Aborting..."
 exit 1
 fi
-cp out/arch/arm64/boot/Image.gz AnyKernel3
+cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
 cp out/arch/arm64/boot/dtbo.img AnyKernel3
 rm -f *zip
 cd AnyKernel3
