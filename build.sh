@@ -51,7 +51,7 @@ mkdir -p out
 make O=out ARCH=arm64 $DEFCONFIG
 
 echo -e "\nStarting compilation...\n"
-make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=$GCC64_DIR/bin/aarch64-none-elf- CROSS_COMPILE_ARM32=$GCC32_DIR/bin/arm-none-eabi- Image.gz dtbo.img
+make -j$(nproc --all) O=out ARCH=arm64 CROSS_COMPILE=$GCC64_DIR/bin/aarch64-elf- CROSS_COMPILE_ARM32=$GCC32_DIR/bin/arm-none-eabi- Image.gz dtbo.img
 
 if [ -f "out/arch/arm64/boot/Image.gz" ] && [ -f "out/arch/arm64/boot/dtbo.img" ]; then
 echo -e "\nKernel compiled succesfully! Zipping up...\n"
