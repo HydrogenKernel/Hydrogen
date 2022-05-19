@@ -23,7 +23,7 @@ fi
 
 if ! [ -d "$GCC64_DIR" ]; then
 echo "GCC for arm64 not found! Cloning to $GCC64_DIR..."
-if ! git clone --depth=1 https://github.com/Positron-Foundation/android_prebuilts_gcc_linux-x86_aarch64_aarch64-none-elf $GCC64_DIR; then
+if ! git clone --depth=1 https://github.com/AOSPA/android_prebuilts_gcc_linux-x86_aarch64_aarch64-elf $GCC64_DIR; then
 echo "Cloning GCC for Arm64  failed! Aborting..."
 exit 1
 fi
@@ -31,7 +31,7 @@ fi
 
 if ! [ -d "$GCC32_DIR" ]; then
 echo "GCC for arm32 not found! Cloning to $GCC32_DIR..."
-if ! git clone --depth=1 https://github.com/Positron-Foundation/android_prebuilts_gcc_linux-x86_arm_arm-none-eabi $GCC32_DIR; then
+if ! git clone --depth=1 https://github.com/Positron-V/android_prebuilts_gcc_linux-x86_arm_arm-none-eabi $GCC32_DIR; then
 echo "Cloning GCC for Arm64  failed! Aborting..."
 exit 1
 fi
